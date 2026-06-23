@@ -1,0 +1,28 @@
+name: Generate PDF with Claude
+
+on:
+  schedule:
+    - cron: '5 4 * * *'  # Se ejecuta a las 4:05 AM UTC (ajusta si necesitas otro horario)
+
+jobs:
+  generate-pdf:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          pip install anthropic
+      
+      - name: Generate PDF
+        env:
+          ANTHROPIC_API_KEY: ${{ secrets.ANTHROPIC_API_KEY }}
+        run: python generate_pdf.py
+      
+      - name: Upload PDF to Google Drive (optional)
+        run: echo "PDF generado y listo"
